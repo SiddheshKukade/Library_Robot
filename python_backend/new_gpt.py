@@ -80,12 +80,12 @@ def recommend(query):
     # recommended_books_indices = np.argsort(np_array)
     print("books indices", recommended_books_indices)
     recommended_books = data.iloc[recommended_books_indices][[
-        "Title", "Authors", "Description", "Issued"]]
+        "Title", "Authors", "Description", "Issued", "shelf_no", "section"]]
 
     return recommended_books
 
 
 # Now, when you call the recommend function with a query, it will include the count of copies if the keyword "copies" is in the query.
 if __name__ == "__main__":
-    result = recommend("Show me books on assembly language")
+    result = recommend("Show me books on machine learning")
     print(result)

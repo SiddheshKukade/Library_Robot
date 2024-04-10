@@ -156,6 +156,8 @@ const RobotUI = () => {
                         <th>Book Title</th>
                         <th>Author</th>
                         <th>Issued</th>
+                        <th>Shelf No</th>
+                        <th>Section</th>
                     </tr>
                 </thead>
                 {recommededBooks.length === 0 ? (
@@ -170,6 +172,8 @@ const RobotUI = () => {
                                         <td>{book["Title"]}</td>
                                         <td>{book["Authors"]}</td>
                                         <td>{book["Issued"] ? "True" : "False"}</td>
+                                        <td>{book["shelf_no"] }</td>
+                                        <td>{book["section"] }</td>
                                     </tr>
                     
                                 </tbody>
