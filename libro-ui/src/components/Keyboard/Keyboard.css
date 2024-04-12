@@ -10,7 +10,7 @@
   }
 .keyboard { 
 	display: flex; 
-	height: 100vh; 
+	/* height: 100vh;  */
 	flex-direction: column; 
 	/* transition: all ; */
 	justify-content: flex-start; 

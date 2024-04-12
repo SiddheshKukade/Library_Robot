@@ -11,13 +11,15 @@ import Header from "../Header/Header";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
 import { setBook } from "../../store/Books";
+import { FaKeyboard } from "react-icons/fa6";
 
 const RobotUI = () => {
     const [searchTerm, setSearchTerm] = useState("");
-	const [inputText, setInputText] = useState(''); 
-
+    const [inputText, setInputText] = useState('');
+    const [welcomeSpeech, setWelcomeSpeech] = useState(false)
     const [isKeyboardVisible, setKeyboardVisible] = useState(true);
     const [voiceSearchTerm, setVoiceSearchTerm] = useState("");
+    const [showKeyboard, setShowKeyboard] = useState("");
     const [recommededBooks, setRecommededBooks] = useState([]);
     const [showTable, setShowTable] = useState(false);
     const navigate = useNavigate();
@@ -30,7 +32,7 @@ const RobotUI = () => {
         setKeyboardVisible(true);
     };
 
-    
+
     const {
         transcript,
         listening,
@@ -44,10 +46,24 @@ const RobotUI = () => {
     useEffect(() => {
         setSearchTerm(voiceSearchTerm);
     }, [voiceSearchTerm]);
-    useEffect(()=>{
+    useEffect(() => {
         setInputText(transcript)
     }, [listening])
 
+    useEffect(()=>{
+        const speakWelcome = ()=>{
+          const synth = window.speechSynthesis;
+          const utterance = new SpeechSynthesisUtterance(
+              "Welcome to LIBRO, your library Assistant, Please feel free to ask queries"
+          );
+          setWelcomeSpeech(true)
+          synth.speak(utterance);
+        }
+        if(welcomeSpeech == false){
+         speakWelcome();
+        }
+  
+      }, [])
     const onClickHandlerMic = () => SpeechRecognition.startListening;
     if (!browserSupportsSpeechRecognition) {
         return <span>Browser doesn't support speech recognition.</span>;
@@ -56,7 +72,7 @@ const RobotUI = () => {
     function handleDescription(book) {
         dispatch(setBook(book));
         navigate("/Description")
-      }
+    }
 
     function handleSubmit(event) {
         SpeechRecognition.stopListening();
@@ -66,32 +82,33 @@ const RobotUI = () => {
         // event.preventDefault();
 
         console.log(searchTerm);
-    
+
         // Make an HTTP POST request to your Flask API
         fetch("http://127.0.0.1:5000/recommend", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ query: inputText }),
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ query: inputText }),
         })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            
-            // Use speech synthesis to speak the result
-            const synth = window.speechSynthesis;
-            const utterance = new SpeechSynthesisUtterance(
-                "Here are your results from Libro"
-            );
-            synth.speak(utterance);
-            setRecommededBooks(data);
-            setShowTable(true);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      }
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+
+                // Use speech synthesis to speak the result
+                const synth = window.speechSynthesis;
+                const utterance = new SpeechSynthesisUtterance(
+                    "Here are your results from Libro"
+                );
+                synth.speak(utterance);
+                setRecommededBooks(data);
+                setShowTable(true);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }
+
 
     return (
         <div className="robot-screen">
@@ -123,10 +140,9 @@ const RobotUI = () => {
                 </button>
             </div>
             <div className="search-bar">
-                <FaMicrophone
-                    onClick={SpeechRecognition.startListening}
-                    className="voice-icon"
-                />
+
+         
+             
                 <button
                     className="btngood"
                     onClick={() => {
@@ -148,7 +164,8 @@ const RobotUI = () => {
                     Reset
                 </button>
             </div>
-            <Keyboard searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearchClick={handleSearchClick} setInputText={setInputText} inputText={inputText} />
+            <pre>{JSON.stringify({showKeyboard})}</pre>
+            <Keyboard  setShowKeyboard={setShowKeyboard} showKeyboard={showKeyboard} searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearchClick={handleSearchClick} setInputText={setInputText} inputText={inputText} SpeechRecognition={SpeechRecognition} />
 
             {showTable ? (<table class="content-table">
                 <thead>
@@ -167,15 +184,15 @@ const RobotUI = () => {
                         return (
                             <>
                                 <tbody>
-                    
+
                                     <tr onClick={(e) => handleDescription(book)}>
                                         <td>{book["Title"]}</td>
                                         <td>{book["Authors"]}</td>
                                         <td>{book["Issued"] ? "True" : "False"}</td>
-                                        <td>{book["shelf_no"] }</td>
-                                        <td>{book["section"] }</td>
+                                        <td>{book["shelf_no"]}</td>
+                                        <td>{book["section"]}</td>
                                     </tr>
-                    
+
                                 </tbody>
                             </>
                         );
