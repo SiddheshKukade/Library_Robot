@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { setBook } from "../../store/Books";
 import { FaKeyboard } from "react-icons/fa6";
 
+
 const RobotUI = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [inputText, setInputText] = useState('');
@@ -27,7 +28,6 @@ const RobotUI = () => {
     const handleButtonClick = (buttonLabel) => {
         console.log(`Button ${buttonLabel} clicked`);
     };
-
     const handleSearchClick = () => {
         setKeyboardVisible(true);
     };
@@ -49,21 +49,6 @@ const RobotUI = () => {
     useEffect(() => {
         setInputText(transcript)
     }, [listening])
-
-    useEffect(()=>{
-        const speakWelcome = ()=>{
-          const synth = window.speechSynthesis;
-          const utterance = new SpeechSynthesisUtterance(
-              "Welcome to LIBRO, your library Assistant, Please feel free to ask queries"
-          );
-          setWelcomeSpeech(true)
-          synth.speak(utterance);
-        }
-        if(welcomeSpeech == false){
-         speakWelcome();
-        }
-  
-      }, [])
     const onClickHandlerMic = () => SpeechRecognition.startListening;
     if (!browserSupportsSpeechRecognition) {
         return <span>Browser doesn't support speech recognition.</span>;
@@ -141,8 +126,6 @@ const RobotUI = () => {
             </div>
             <div className="search-bar">
 
-         
-             
                 <button
                     className="btngood"
                     onClick={() => {
@@ -150,31 +133,39 @@ const RobotUI = () => {
                     }}
                 >
                     <button
+                        style={{ fontSize: "30px", }}
                         className="button_1"
                         onClick={handleSubmit}
+
                     >
                         Submit
                     </button>
                 </button>
-                <button className="button_1" onClick={() => {
-                    setInputText("");
-                    setShowTable(false);
-                    resetTranscript();
-                }}>
+                <button
+                    style={{ fontSize: "30px", }}
+
+                    className="button_1" onClick={() => {
+                        setInputText("");
+                        setShowTable(false);
+                        resetTranscript();
+
+                    }}>
                     Reset
                 </button>
             </div>
-            <pre>{JSON.stringify({showKeyboard})}</pre>
-            <Keyboard  setShowKeyboard={setShowKeyboard} showKeyboard={showKeyboard} searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearchClick={handleSearchClick} setInputText={setInputText} inputText={inputText} SpeechRecognition={SpeechRecognition} />
+
+            <Keyboard setShowKeyboard={setShowKeyboard} showKeyboard={showKeyboard} searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearchClick={handleSearchClick} setInputText={setInputText} inputText={inputText} SpeechRecognition={SpeechRecognition} />
 
             {showTable ? (<table class="content-table">
-                <thead>
+                <thead style={{ fontSize: "30px" }}>
                     <tr>
-                        <th>Book Title</th>
-                        <th>Author</th>
-                        <th>Issued</th>
-                        <th>Shelf No</th>
-                        <th>Section</th>
+                        <th align="center">Book Title</th>
+                        <th align="center">Author</th>
+                        <th align="center">Issued</th>
+                        <th align="center">Shelf No</th>
+                        <th align="center">Section</th>
+                        <th align="center">Action</th>
+
                     </tr>
                 </thead>
                 {recommededBooks.length === 0 ? (
@@ -183,14 +174,28 @@ const RobotUI = () => {
                     recommededBooks.map((book) => {
                         return (
                             <>
-                                <tbody>
+
+                                <tbody style={{ fontSize: "30px" }}>
 
                                     <tr onClick={(e) => handleDescription(book)}>
-                                        <td>{book["Title"]}</td>
-                                        <td>{book["Authors"]}</td>
-                                        <td>{book["Issued"] ? "True" : "False"}</td>
-                                        <td>{book["shelf_no"]}</td>
-                                        <td>{book["section"]}</td>
+                                        <td align="center">{book["Title"]}</td>
+                                        <td align="center">{book["Authors"]}</td>
+                                        <td align="center">{book["Issued"] ? "True" : "False"}</td>
+                                        <td align="center">{book["shelf_no"]}</td>
+                                        <td align="center">{book["section"]}</td>
+                                        <td> <button
+                                            className="btngood"
+                                            onClick={() => {
+                                                onClickHandlerSetVoiceInput();
+                                            }}
+                                        >
+                                            <button
+                                                className="button_1"
+                                                onClick={handleSubmit}
+                                            >
+                                                Locate Book
+                                            </button>
+                                        </button></td>
                                     </tr>
 
                                 </tbody>

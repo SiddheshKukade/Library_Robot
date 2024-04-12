@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import './Keyboard.css';
 import { computeHeadingLevel } from '@testing-library/react';
 import { FaDeleteLeft } from "react-icons/fa6";
+import { IoQrCodeOutline } from "react-icons/io5";
 import { FaKeyboard, FaMicrophone } from 'react-icons/fa';
 export default function Keyboard({
 	setInput, searchTerm, setSearchTerm, handleSearchClick, inputText, setInputText,
@@ -155,6 +156,13 @@ export default function Keyboard({
                     onClick={()=> setShowKeyboard(prev => !prev)}
                     className="voice-icon"
                 />
+				
+				<IoQrCodeOutline
+                    size={"100px"}
+                    onClick={()=> setShowKeyboard(prev => !prev)}
+                    className="voice-icon"
+                />
+				
 				</div>
 			{showKeyboard && (<div className="keyboardcontainer">
 				<div className="container">
