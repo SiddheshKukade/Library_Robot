@@ -93,6 +93,40 @@ const RobotUI = () => {
                 console.error("Error:", error);
             });
     }
+    function submitLocateBook(number){
+        SpeechRecognition.stopListening();
+        console.log("submit clicked", inputText, searchTerm);
+        setRecommededBooks([]);
+        // setSearchTerm("");
+        // event.preventDefault();
+
+        console.log(searchTerm);
+
+        // Make an HTTP POST request to your Flask API
+        fetch("http://127.0.0.1:5000/locatebook", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ query: inputText, number: number }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+
+                // Use speech synthesis to speak the result
+                const synth = window.speechSynthesis;
+                const utterance = new SpeechSynthesisUtterance(
+                    "Here are your results from Libro"
+                );
+                synth.speak(utterance);
+                setRecommededBooks(data);
+                setShowTable(true);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }
 
 
     return (
@@ -191,7 +225,7 @@ const RobotUI = () => {
                                         >
                                             <button
                                                 className="button_1"
-                                                onClick={handleSubmit}
+                                                onClick={()=> submitLocateBook(book["shelf_no"])}
                                             >
                                                 Locate Book
                                             </button>
