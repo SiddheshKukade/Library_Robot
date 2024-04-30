@@ -26,10 +26,10 @@ def get_recommendations():
 def get_locatebook():
     data = request.get_json()
     number = data.get('number')
-    # ser = serial.Serial('/dev/ttyACM0', 9600)
+    ser = serial.Serial('/dev/ttyACM0', 9600)
     data = str(number) 
-    # ser.write(data.encode())
-    # ser.close()
+    ser.write(data.encode())
+    ser.close()
     return {"status": 200, "message": "Sucessful response", "number": data}
 
 if __name__ == '__main__':
