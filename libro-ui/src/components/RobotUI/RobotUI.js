@@ -117,7 +117,7 @@ const RobotUI = () => {
                 // Use speech synthesis to speak the result
                 const synth = window.speechSynthesis;
                 const utterance = new SpeechSynthesisUtterance(
-                    "Here are your results from Libro"
+                    `${"Libro is going to book number"} ${number}`
                 );
                 synth.speak(utterance);
                 setRecommededBooks(data);
