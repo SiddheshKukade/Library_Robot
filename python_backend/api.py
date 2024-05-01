@@ -25,6 +25,7 @@ def get_recommendations():
 
 @app.route('/locatebook', methods=['POST'])
 def get_locatebook():
+    data = request.get_json()
     number = data.get('number')
     ser = serial.Serial('/dev/ttyACM0', 9600)
     data = str(number) 
