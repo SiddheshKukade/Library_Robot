@@ -3,6 +3,7 @@ from flask_cors import CORS
 from new_gpt import recommend
 import pandas as pd
 import serial
+import time
 app = Flask(__name__)
 
 # Enable CORS for the entire app
@@ -24,11 +25,14 @@ def get_recommendations():
 
 @app.route('/locatebook', methods=['POST'])
 def get_locatebook():
-    data = request.get_json()
     number = data.get('number')
     ser = serial.Serial('/dev/ttyACM0', 9600)
     data = str(number) 
-    ser.write(data.encode())
+    # Sending signal for 5 seconds continuously
+    start_time = time.time()
+    while (time.time() - start_time) < 5:
+        ser.write(data.encode())
+        time.sleep(0.1)  # Adjust delay as needed
     ser.close()
     return {"status": 200, "message": "Sucessful response", "number": data}
 
