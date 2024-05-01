@@ -28,9 +28,9 @@ def get_locatebook():
     number = data.get('number')
     ser = serial.Serial('/dev/ttyACM0', 9600)
     data = str(number) 
-    # Sending signal for 5 seconds continuously
+    # Sending signal for 10 seconds continuously
     start_time = time.time()
-    while (time.time() - start_time) < 5:
+    while (time.time() - start_time) < 10:
         ser.write(data.encode())
         time.sleep(0.1)  # Adjust delay as needed
     ser.close()
